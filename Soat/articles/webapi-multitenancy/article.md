@@ -1,4 +1,4 @@
-# Multi-tenancy Et Microsoft WebAPI 2
+# Multi-tenancy Et Microsoft ASP.NET WebAPI 2
 
 Alors que les systèmes Saas (Software As A Service) ont démocratisé la notion de multi-tenancy, qui permet à un système d'être exploité par plus d'une entité, l'évolution des principes de la SOA (Architecture Orienté Service) vers des systèmes de plus en plus distribué, via les microservices, marque l'avènement  des API REST.
 
@@ -12,4 +12,22 @@ Sur la stack .Net, ASP.NET WebAPI est le framework idéal pour monter une API RE
 ## Use-case 1 : Cas du Saas : 
 
 Dans le cas d'un Saas, la première problématique commerciale est d'être capable de monitorer de gérer les accès à l'API par tenant.
-Nous allons pouoir bénéficier de l'attribut RoutePrefix de HttpController afin de pouvoir identifier le compte du tenant dont provient l'appel.  
+Nous allons pouvoir bénéficier de l'attribut RoutePrefix de HttpController afin de mutualiser l'identification du compte du tenant dont provient l'appel.  
+
+```c#
+    [RoutePrefix("api/v1/{tenantId}/ping")]
+    public class PingController : ApiController
+    {
+        [HttpGet, Route("")]
+        public IHttpActionResult Ping(string tenantId)
+        {
+            return Ok(tenantId);
+        }
+    }
+```
+
+```HTTP
+GET /api/v1/the_tenant_id/ping HTTP/1.1
+Host: localhost:61450
+Cache-Control: no-cache
+```
